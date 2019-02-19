@@ -1,4 +1,4 @@
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import pre_save, post_save, pre_delete
 from django.dispatch import receiver
 from .models import Post
 import matplotlib
@@ -12,12 +12,15 @@ import os, uuid
 def save_graph(sender, instance, **kwargs):
     print('here')
     # if instance.x and instance.y:
+    if instance.graph:
+        os.remove('.'+instance.graph.url)
+
     x = list(map(lambda i: int(i),instance.x.split(",")))
     y = list(map(lambda i: int(i),instance.y.split(",")))
     fig = plt.figure()
     ax = plt.subplot(111)
     ax.plot(x, y, label='$y = numbers')
-    plt.title('Legend inside')
+    plt.title('Title')
     ax.legend()
     img_name = '{}-{}.png'.format(instance.author.username, str(uuid.uuid1()))
     fig.savefig(img_name)
@@ -34,3 +37,9 @@ def delete_graph(sender, instance, **kwargs):
     img_name = instance.graph.url.split('/')[3]
     print(instance.graph.url)
     os.remove(img_name)
+
+
+@receiver(pre_delete, sender=Post)
+def delete_graph_image(sender, instance, **kwargs):
+    print(os.getcwd())
+    os.remove('.'+instance.graph.url)

@@ -1,5 +1,11 @@
 {% extends 'blog/base.html' %}
     {% block content %}
+    {% if posts|length == 0%}
+        <article class="media content-section">
+            <div class="article-content"><p ><h3>You haven't posted anything!</h3></p>
+            <p> Create a new post <a href="{% url 'post-create' %}">here</a></p></div>
+        </article>
+    {% endif %}
         {% for post in posts %}
             <article class="media content-section">
                 <img class="rounded-circle article-img" src="{{ post.author.profile.image.url}}" alt="">
