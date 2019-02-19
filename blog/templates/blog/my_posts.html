@@ -2,15 +2,17 @@
     {% block content %}
         {% for post in posts %}
             <article class="media content-section">
-                <a href="#"><img class="rounded-circle article-img" src="{{ post.author.profile.image.url}}" alt=""></a>
+                <img class="rounded-circle article-img" src="{{ post.author.profile.image.url}}" alt="">
                 <div class="media-body">
                 <div class="article-metadata">
                   <a class="mr-2" style="color: #333" href="#">{{ post.author.get_full_name }}</a>
                   <small class="text-muted">{{ post.date_posted | date:"F d, Y" }}</small>
+                  <a href="{% url 'post-delete' post.id %}" style="color: #333" class="mb-1 float-right"><i width="1rem" data-feather="x" ></i></a>
+                  <a href="{% url 'post-update' post.id %}" style="color: #333" class="mb-1 mr-1 float-right"><i width="1rem" data-feather="edit-3" ></i></a>
                 </div>
                 <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
                 <p class="article-content">{{ post.content }}</p>
-                <p class="article-content"><img class="img-fluid" src="{{ post.graph.url}}" alt=""></p>
+                <p class="article-content"><img src="{{ post.graph.url}}" alt=""></p>
                 </div>
             </article>
         {% endfor %}
